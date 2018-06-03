@@ -12,6 +12,7 @@ import os
 import requests
 import re
 import logging
+from random import randrange
 
 # Use the built-in Telegram bot 'Bot Father' to obtain this if you don't have one already
 API_KEY = 'Place your Telegram bot API key here'
@@ -28,6 +29,8 @@ def decode(tokens, msg):
 	# Initialize output to an empty string
 	output = ''
 
+	thank_you = ["Thanks, " + msg['from']['username'] + " ☺", "You're the best, " + msg['from']['username'] +"!", "Aw, shucks", "+1 Ego Points!", "Hell yeah, thanks fam"]
+
 	# if-elif-else statements to catch commands
 
 	# '!time' returns the current time for the server the bot resides on
@@ -35,7 +38,7 @@ def decode(tokens, msg):
 		output = "It is currently *" + time.strftime("%-I:%M:%S %p") + "* EST."
 		
 	elif tokens[0] == '!goodbot':
-		output = "Thanks, " + msg['from']['username'] + " ☺"
+		output = thank_you[randrange(0, len(thank_you) - 1)]
 
 	elif tokens[0] in ['!yt', '!ytlucky']:
 		query_string = urllib.parse.urlencode({"search_query" : ' '.join(tokens[1:])})
