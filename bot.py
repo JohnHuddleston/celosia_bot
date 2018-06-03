@@ -33,6 +33,9 @@ def decode(tokens, msg):
 	# '!time' returns the current time for the server the bot resides on
 	if tokens[0] == '!time':
 		output = "It is currently *" + time.strftime("%-I:%M:%S %p") + "* EST."
+		
+	elif tokens[0] == '!goodbot':
+		output = "Thanks, " + msg['from']['username'] + " ☺"
 
 	elif tokens[0] in ['!yt', '!ytlucky']:
 		query_string = urllib.parse.urlencode({"search_query" : ' '.join(tokens[1:])})
