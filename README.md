@@ -1,4 +1,4 @@
-# celosia_bot
+# celosia_bot 🌺
 A small Telegram bot written for Python 3.  Currently support a very small set of commands.
 
 ## Python Module Requirements:
