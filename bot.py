@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#! /bin/python3
 
 import telepot
 import time
@@ -11,6 +11,7 @@ import psutil
 import os
 import requests
 import re
+import logging
 
 # Use the built-in Telegram bot 'Bot Father' to obtain this if you don't have one already
 API_KEY = 'Place your Telegram bot API key here'
@@ -25,7 +26,7 @@ def remove_dups(duplicate):
 def decode(tokens, msg):
 
 	# Initialize output to an empty string
-	output = ""
+	output = ''
 
 	# if-elif-else statements to catch commands
 
@@ -50,7 +51,6 @@ def decode(tokens, msg):
 	# geolocation via IP
 	elif tokens[0] == '!whereyouat':
 		my_ip = json.load(urllib.request.urlopen('http://jsonip.com'))['ip']
-		print(my_ip)
 		api = "http://freegeoip.net/json/" + my_ip
 		try:
 			result = urllib.request.urlopen(api).read()
@@ -59,8 +59,7 @@ def decode(tokens, msg):
 			result = json.loads(result)
 			output = "This bot is currently chilling in *" + result['city'] + ", " + result['region_name'] + ", " + result['country_name'] + "*."
 		except e:
-			print("Could not find location")
-			print(e)
+			logging.info("Could not find location: " + e)
 			output = "Sorry, I can't figure out where I am!"
 
 	# super simple echo
@@ -118,7 +117,6 @@ def decode(tokens, msg):
 			output = "Congrats!  Your poll *{}* has been posted and can be found here: https://www.strawpoll.me/{} !".format(title, str(response.content[6:14])[2:-1])
 		else:
 			output = "Sorry, something went wrong, please try again later!"
-			print(response.content)
 		
 
 	# once the output is constructed, we return it
@@ -127,14 +125,14 @@ def decode(tokens, msg):
 
 def handle(msg):
 	content_type, chat_type, chat_id = telepot.glance(msg)
-	print(content_type, chat_type, chat_id)
+	logging.info("New Message Profile: " + content_type + ", " + chat_type + ", " + str(chat_id))
 
 	if content_type == 'text':
 		inp = msg['text']
 		try:
-			print("Received command " + inp + " from " + msg['from']['username'])
+			logging.info("Received command " + inp + " from " + msg['from']['username'])
 		except KeyError:
-			print("Received command " + inp + " from " + str(msg['from']['id']) + " [USERNAME_NOT_SET FALLBACK]")
+			logging.info("Received command " + inp + " from " + str(msg['from']['id']) + " [USERNAME_NOT_SET FALLBACK]")
 		tokens = inp.split(' ')
 
 		output = decode(tokens, msg)
@@ -152,13 +150,20 @@ def handle(msg):
 				bot.sendMessage(chat_id, output)
 			else:
 				bot.sendMessage(chat_id, output, parse_mode='Markdown')
+			logging.info("Message sent to chat " + str(chat_id))
 
 			
 
-bot = telepot.Bot(API_KEY)
-print(bot.getMe())
-MessageLoop(bot, handle).run_as_thread()
-print("Now listening...")
+def main():
 
-while True:
-	time.sleep(5)
+	logging.basicConfig(format='%(asctime)s  %(levelname)s: %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', filename='celosia.log', level=logging.INFO)
+
+	bot = telepot.Bot(API_KEY)
+	MessageLoop(bot, handle).run_as_thread()
+	logging.info("Bot started at " + time.strftime("%-I:%M:%S %p"))
+
+	while True:
+		time.sleep(5)
+
+if __name__ == "__main__":
+	main()
