@@ -154,16 +154,12 @@ def handle(msg):
 
 			
 
-def main():
+logging.basicConfig(format='%(asctime)s  %(levelname)s: %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', filename='celosia.log', level=logging.INFO)
 
-	logging.basicConfig(format='%(asctime)s  %(levelname)s: %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', filename='celosia.log', level=logging.INFO)
+bot = telepot.Bot(API_KEY)
+MessageLoop(bot, handle).run_as_thread()
+logging.info("Bot started at " + time.strftime("%-I:%M:%S %p"))
+print("Bot started.")
 
-	bot = telepot.Bot(API_KEY)
-	MessageLoop(bot, handle).run_as_thread()
-	logging.info("Bot started at " + time.strftime("%-I:%M:%S %p"))
-
-	while True:
-		time.sleep(5)
-
-if __name__ == "__main__":
-	main()
+while True:
+	time.sleep(5)
