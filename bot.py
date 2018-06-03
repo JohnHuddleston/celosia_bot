@@ -92,6 +92,7 @@ def decode(tokens, msg):
 	elif tokens[0] == '!help':
 		output = "Here are the commands I can currently handle for you:\n"
 		output += "*{}*: {}\n".format("!echo", "I'll repeat back whatever you say!")
+		output += "*{}*: {}\n".format("!goodbot", "Give me a little ego boost!")
 		output += "*{}*: {}\n".format("!newpoll", "I'll set up a strawpoll for you and send back the link!  (Usage: !new poll \"poll title\" \"option 1\" \"option 2\" ... )")
 		output += "*{}*: {}\n".format("!serverstats", "Find out about RAM and processor usage on my server!")
 		output += "*{}*: {}\n".format("!time", "I'll let you know what time it is, in case those timestamps don't help.")
